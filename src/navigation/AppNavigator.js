@@ -5,6 +5,7 @@ import MainPage from '../screens/MainPage';
 import AnimePage from '../screens/AnimePage';
 import CharacterPage from '../screens/CharacterPage';
 import CharactersPage from '../screens/CharactersPage';
+import CreateAnimePage from '../screens/CreateAnime';
 import { Menu, Button } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import { openMenu, closeMenu } from '../store/menu';
@@ -27,6 +28,7 @@ function AppNavigator() {
             >
               <Menu.Item onPress={() => { navigation.navigate('MainPage'); dispatch(closeMenu()); }} title="MainPage" />
               <Menu.Item onPress={() => { navigation.navigate('CharactersPage'); dispatch(closeMenu()); }} title="Characters" />
+              <Menu.Item onPress={() => { navigation.navigate('CreateAnime'); dispatch(closeMenu()); }} title="Create Anime" />
             </Menu>
           ),
         })}
@@ -35,6 +37,7 @@ function AppNavigator() {
         <Stack.Screen name="AnimePage" component={AnimePage} />
         <Stack.Screen name="CharacterPage" component={CharacterPage} />
         <Stack.Screen name="CharactersPage" component={CharactersPage} />
+        <Stack.Screen name="CreateAnime" component={CreateAnimePage} />
       </Stack.Navigator>
     </NavigationContainer>
   );
