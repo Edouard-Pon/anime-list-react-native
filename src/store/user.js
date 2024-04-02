@@ -12,6 +12,15 @@ export const login = createAsyncThunk('user/login', async ({ username, password 
   }
 });
 
+export const signup = createAsyncThunk('user/signup', async ({ username, password }) => {
+  try {
+    const response = await api.post('/user/register', { username, password });
+    return response.status === 200;
+  } catch (error) {
+    return error.response.data.message;
+  }
+});
+
 const userSlice = createSlice({
   name: 'user',
   initialState: {
@@ -19,6 +28,9 @@ const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(login.fulfilled, (state, action) => {
+      state.userInfo = action.payload;
+    });
+    builder.addCase(signup.fulfilled, (state, action) => {
       state.userInfo = action.payload;
     });
   },
