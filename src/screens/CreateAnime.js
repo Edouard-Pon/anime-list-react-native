@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, Image } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Picker } from '@react-native-picker/picker';
-import StarRating from 'react-native-star-rating';
 
 export default function App() {
   const [releaseDate, setChosenDate] = useState(new Date());
@@ -145,12 +144,16 @@ export default function App() {
         keyboardType="numeric"
       />
       <Text >Select Rating</Text>
-      <StarRating
-        disabled={false}
-        maxStars={5}
-        rating={rating}
-        selectedStar={(rating) => handleRatingChange(rating)}
-      />
+      <Picker
+        selectedValue={rating}
+        style={{ height: 50, width: 200 }}
+        onValueChange={(itemValue, itemIndex) => handleRatingChange(itemValue)}
+      >
+        <Picker.Item label="Family Friendly" value="13" />
+        <Picker.Item label="Teen" value="16" />
+        <Picker.Item label="18+" value="18" />
+      </Picker>
+
       {/* Add input fields for other properties */}
       <Button title="Upload cover image" onPress={handleImagePick} />
       {formData.coverImage && (
