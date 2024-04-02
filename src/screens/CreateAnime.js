@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, Image } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Picker } from '@react-native-picker/picker';
+import StarRating from 'react-native-star-rating';
 
 export default function App() {
   const [releaseDate, setChosenDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
   const [status, setStatus] = useState('Ongoing');
+  const [rating, setRating] = useState(0);
 
   const handleDateChange = (event, selectedDate) => {
     const currentDate = selectedDate || releaseDate;
@@ -68,6 +70,10 @@ export default function App() {
         coverImage: result.uri,
       });
     }
+  };
+
+  const handleRatingChange = (selectedRating) => {
+    setRating(selectedRating);
   };
 
   const handleSubmit = () => {
@@ -134,13 +140,16 @@ export default function App() {
       />
       <TextInput
         style={styles.input}
-        placeholder="Duration"
+        placeholder="Duration (hours)"
         onChangeText={(text) => handleChange('duration', text)}
+        keyboardType="numeric"
       />
-      <TextInput
-        style={styles.input}
-        placeholder="Rating"
-        onChangeText={(text) => handleChange('rating', text)}
+      <Text >Select Rating</Text>
+      <StarRating
+        disabled={false}
+        maxStars={5}
+        rating={rating}
+        selectedStar={(rating) => handleRatingChange(rating)}
       />
       {/* Add input fields for other properties */}
       <Button title="Upload cover image" onPress={handleImagePick} />
