@@ -1,9 +1,10 @@
 import React from 'react';
-import { Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { Image, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 function AnimeCard({ anime, navigation }) {
   return (
     <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('AnimePage', { anime })}>
+      <Image style={styles.image} source={{uri: anime.coverImagePath}} />
       <Text style={styles.title}>{anime.title}</Text>
     </TouchableOpacity>
   );
@@ -24,6 +25,10 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  image: {
+    width: 100,
+    height: 100,
   },
 });
 
