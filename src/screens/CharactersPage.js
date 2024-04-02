@@ -1,19 +1,19 @@
 import React, { useEffect } from 'react';
 import { Text, View, StyleSheet, SectionList } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import AnimeCard from '../components/AnimeCard';
-import { fetchAnime } from '../store/anime';
+import { fetchCharacter } from '../store/character';
+import CharacterCard from '../components/CharacterCard';
 
-function MainPage({ navigation }) {
-  const animeList = useSelector((state) => state.anime.animeList);
+function CharactersPage({ navigation }) {
+  const characterList = useSelector((state) => state.character.characterList);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchAnime());
+    dispatch(fetchCharacter());
   }, [dispatch]);
 
   const sections = [
-    {title: 'Anime', data: animeList, renderItem: ({item}) => <AnimeCard anime={item} navigation={navigation} />},
+    {title: 'Characters', data: characterList, renderItem: ({item}) => <CharacterCard character={item} navigation={navigation} />}
   ];
 
   return (
@@ -42,4 +42,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MainPage;
+export default CharactersPage;
