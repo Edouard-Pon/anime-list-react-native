@@ -52,6 +52,7 @@ function MainPage({ navigation }) {
   return (
     <View style={styles.container}>
       <Searchbar
+        style={styles.searchbar}
         placeholder="Search"
         onChangeText={(search) => setSearchQuery(search)}
         value={searchQuery}
@@ -67,6 +68,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',
+  },
+  searchbar: {
+    marginRight: 16,
+    marginLeft: 16,
+    marginTop: 5
   }
 });
 
