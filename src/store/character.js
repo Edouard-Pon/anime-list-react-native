@@ -6,10 +6,33 @@ export const fetchCharacter = createAsyncThunk('character/fetchCharacter', async
   return response.data.character;
 });
 
-export const characterSlice = createSlice({
+const initialState = {
+  name: '',
+  originalName: '',
+  description: '',
+  image: null,
+  anime: [],
+};
+
+const characterSlice = createSlice({
   name: 'character',
-  initialState: {
-    characterList: [],
+  initialState,
+  reducers: {
+    setName: (state, action) => {
+      state.name = action.payload;
+    },
+    setOriginalName: (state, action) => {
+      state.originalName = action.payload;
+    },
+    setDescription: (state, action) => {
+      state.description = action.payload;
+    },
+    setImage: (state, action) => {
+      state.image = action.payload;
+    },
+    setAnime: (state, action) => {
+      state.anime = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchCharacter.fulfilled, (state, action) => {
@@ -17,5 +40,7 @@ export const characterSlice = createSlice({
     });
   },
 });
+
+export const { setName, setOriginalName, setDescription, setImage, setAnime } = characterSlice.actions;
 
 export default characterSlice.reducer;
