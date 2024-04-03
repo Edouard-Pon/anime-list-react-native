@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, StyleSheet } from 'react-native';
+import {View, TextInput, Button, StyleSheet, Text, TouchableOpacity} from 'react-native';
 import { useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import { signup } from '../store/user';
+
 
 function SignupPage() {
   const [username, setUsername] = useState('');
@@ -21,24 +22,29 @@ function SignupPage() {
   };
 
   return (
-    <View style={styles.container}>
-      <TextInput
-        style={styles.input}
-        placeholder="Username"
-        value={username}
-        onChangeText={setUsername}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
-      <Button title="Signup" onPress={handleSignup} />
-    </View>
+      <View style={styles.container}>
+        <Text>Username</Text>
+        <TextInput
+            style={styles.input}
+            placeholder="Username"
+            value={username}
+            onChangeText={setUsername}
+        />
+        <Text>Password</Text>
+        <TextInput
+            style={styles.input}
+            placeholder="Password"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+        />
+        <TouchableOpacity style={styles.button} onPress={handleSignup}>
+          <Text style={styles.buttonText}>SignUp</Text>
+        </TouchableOpacity>
+      </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {
@@ -47,11 +53,20 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
+    height: 55,
     marginBottom: 16,
-    paddingLeft: 8,
+    paddingLeft: 15,
+    borderRadius: 5,
+    backgroundColor: 'white',
+  },
+  button: {
+    backgroundColor: 'rgba(173,120,255,0.58)',
+    borderRadius: 5,
+    padding: 10,
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: 'white',
   },
 });
 
