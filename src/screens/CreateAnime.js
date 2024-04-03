@@ -171,15 +171,18 @@ export default function App() {
 
       <Button title="Upload cover image" onPress={handleImagePick} />
       {formData.coverImage ? (
-        <Image
-          source={{ uri: formData.coverImage }}
-          style={styles.image}
-          onError={(error) => console.error('Image loading error:', error)}
-        />
+        <>
+          <Button title="Clear image" onPress={() => handleChange('coverImage', null)} />
+          <Image
+            source={{ uri: formData.coverImage }}
+            style={styles.image}
+            onError={(error) => console.error('Image loading error:', error)}
+          />
+        </>
       ) : (
         <Text>No image selected</Text>
       )}
-      <Button title="Create" onPress={handleSubmit} />
+      <Button title="Submit" onPress={handleSubmit} />
     </View>
   );
 }
