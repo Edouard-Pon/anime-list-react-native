@@ -1,16 +1,16 @@
-import React, { useEffect } from 'react';
-import { Text, View, StyleSheet, SectionList, FlatList } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Text, View, StyleSheet, SectionList, FlatList, RefreshControl, ScrollView } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchCharacter } from '../store/character';
 import CharacterCard from '../components/CharacterCard';
 import { Searchbar } from 'react-native-paper';
 
-
 function CharactersPage({ navigation }) {
-  const characterList = useSelector((state) => state.character.characterList);
+  let characterList = useSelector((state) => state.character.characterList);
   const dispatch = useDispatch();
-  const [searchQuery, setSearchQuery] = React.useState('');
-  const [filteredCharacterList, setFilteredCharacterList] = React.useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filteredCharacterList, setFilteredCharacterList] = useState(null);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     dispatch(fetchCharacter());
@@ -33,7 +33,12 @@ function CharactersPage({ navigation }) {
     }
   };
 
-  if (!characterList) return (<View style={styles.container}><Text>Loading...</Text></View>);
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    dispatch(fetchCharacter()).then(() => setRefreshing(false));
+  }, [dispatch]);
+
+  if (!characterList) characterList = [];
 
   const sections = [
     {
@@ -51,23 +56,27 @@ function CharactersPage({ navigation }) {
   ];
 
   return (
-    <View style={styles.container}>
-      <Searchbar
-        placeholder="Search"
-        onChangeText={(search) => setSearchQuery(search)}
-        value={searchQuery}
-      />
-      <SectionList
-        sections={sections}
-        keyExtractor={(item) => item._id}
-      />
-    </View>
+    <SectionList
+      contentContainerStyle={styles.container}
+      sections={sections}
+      keyExtractor={(item) => item._id}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+      ListHeaderComponent={() => (
+        <Searchbar
+          style={styles.searchbar}
+          placeholder="Search"
+          onChangeText={(search) => setSearchQuery(search)}
+          value={searchQuery}
+        />
+      )}
+    />
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',
