@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+
 import MainPage from '../screens/MainPage';
 import AnimePage from '../screens/AnimePage';
 import CharacterPage from '../screens/CharacterPage';
@@ -9,6 +10,8 @@ import CreateAnimePage from '../screens/CreateAnime';
 import CreateCharacterPage from '../screens/CreateCharacter';
 import LoginPage from '../screens/LoginPage';
 import SignupPage from '../screens/SignupPage';
+import ProfilePage from '../screens/ProfilePage';
+
 import { Menu, Button } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import { openMenu, closeMenu } from '../store/menu';
@@ -35,6 +38,7 @@ function AppNavigator() {
               <Menu.Item onPress={() => { navigation.navigate('CharactersPage'); dispatch(closeMenu()); }} title="Characters" />
               <Menu.Item onPress={() => { navigation.navigate('CreateAnime'); dispatch(closeMenu()); }} title="Create Anime" />
               <Menu.Item onPress={() => { navigation.navigate('CreateCharacter'); dispatch(closeMenu()); }} title="Create Character" />
+              <Menu.Item onPress={() => { navigation.navigate('Profile'); dispatch(closeMenu()); }} title="Profile" />
             </Menu>
           ),
         })}
@@ -47,6 +51,7 @@ function AppNavigator() {
         <Stack.Screen name="CreateCharacter" component={CreateCharacterPage} />
         <Stack.Screen name="LoginPage" component={LoginPage} />
         <Stack.Screen name="SignupPage" component={SignupPage} />
+        <Stack.Screen name="Profile" component={ProfilePage} />
       </Stack.Navigator>
     </NavigationContainer>
   );
