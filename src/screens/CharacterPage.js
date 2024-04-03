@@ -1,25 +1,48 @@
 import React from 'react';
-import {View, Text, StyleSheet, Image} from 'react-native';
+import {View, Text, StyleSheet, Image, FlatList, SectionList, ScrollView} from 'react-native';
+import AnimeCard from '../components/AnimeCard';
+import {useSelector} from 'react-redux';
 
-function CharacterPage({ route }) {
+function CharacterPage({ route, navigation }) {
   const { character } = route.params;
+  const animeList = useSelector((state) => state.anime.animeList);
+
+  const sections = [
+    {
+      title: 'Anime',
+      data: [animeList.filter((anime) => character.anime.includes(anime._id))],
+      renderItem: ({ item }) => (
+        <FlatList
+          data={item}
+          numColumns={2}
+          keyExtractor={(item) => item._id}
+          renderItem={({ item }) => <AnimeCard anime={item} navigation={navigation} />}
+        />
+      ),
+    },
+  ];
 
   return (
-    <View style={styles.container}>
-      <Image style={styles.image} source={{uri: character.imagePath}} />
-      <Text style={styles.title}>{character.name}</Text>
-      <Text>Original Name: {character.originalName}</Text>
-      <Text>Description: {character.description}</Text>
-      <Text>Upload Date: {new Date(character.uploadDate).toLocaleDateString('en-GB')}</Text>
-    </View>
+    <SectionList
+      style={styles.container}
+      sections={sections}
+      keyExtractor={(item) => item._id}
+      ListHeaderComponent={() => (
+        <>
+          <Image style={styles.image} source={{uri: character.imagePath}} />
+          <Text style={styles.title}>{character.name}</Text>
+          <Text>Original Name: {character.originalName}</Text>
+          <Text>Description: {character.description}</Text>
+          <Text>Upload Date: {new Date(character.uploadDate).toLocaleDateString('en-GB')}</Text>
+        </>
+      )}
+    />
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   title: {
     fontSize: 24,

@@ -16,6 +16,7 @@ export const createCharacter = createAsyncThunk('character/createCharacter', asy
     formData.append('name', name);
     formData.append('originalName', originalName);
     formData.append('description', description);
+    formData.append('anime', JSON.stringify(character.anime));
     formData.append('image', {
       uri: image.uri,
       type: image.type,
