@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, SectionList, FlatList } from 'react-native';
+import { Text, View, StyleSheet, SectionList, FlatList, RefreshControl, ScrollView } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import AnimeCard from '../components/AnimeCard';
 import { fetchAnime } from '../store/anime';
@@ -10,6 +10,7 @@ function MainPage({ navigation }) {
   const dispatch = useDispatch();
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredAnimeList, setFilteredAnimeList] = useState(null);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     dispatch(fetchAnime());
@@ -32,6 +33,11 @@ function MainPage({ navigation }) {
     }
   };
 
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    dispatch(fetchAnime()).then(() => setRefreshing(false));
+  }, [dispatch]);
+
   if (!animeList) return <View style={styles.container}><Text>Loading...</Text></View>;
 
   const sections = [
@@ -50,21 +56,27 @@ function MainPage({ navigation }) {
   ];
 
   return (
-    <View style={styles.container}>
-      <Searchbar
-        style={styles.searchbar}
-        placeholder="Search"
-        onChangeText={(search) => setSearchQuery(search)}
-        value={searchQuery}
-      />
-      <SectionList sections={sections} keyExtractor={(item) => item._id} />
-    </View>
+    <SectionList
+      contentContainerStyle={styles.container}
+      sections={sections}
+      keyExtractor={(item) => item._id}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+      ListHeaderComponent={() => (
+        <Searchbar
+          style={styles.searchbar}
+          placeholder="Search"
+          onChangeText={(search) => setSearchQuery(search)}
+          value={searchQuery}
+        />
+      )}
+    />
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',
