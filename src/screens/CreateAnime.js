@@ -84,7 +84,6 @@ export default function App() {
 
   const handleSubmit = () => {
     // Implement logic to handle form submission
-    console.log(formData);
   };
 
   return (

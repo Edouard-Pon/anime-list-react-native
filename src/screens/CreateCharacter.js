@@ -37,7 +37,6 @@ export default function CreateCharacter() {
 
     const handleCreate = async () => {
         const action = await dispatch(createCharacter({ name, originalName, description, image, anime }));
-        console.log(action)
         if (action.payload !== undefined && action.payload.name) {
           alert('Character created successfully');
         } else {
