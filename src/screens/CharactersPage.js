@@ -59,22 +59,22 @@ function CharactersPage({ navigation }) {
   ];
 
   return (
-    <View style={styles.container}>
-      <Searchbar
-        style={styles.searchbar}
-        placeholder="Search"
-        onChangeText={setSearchQueryMemoized}
-        value={searchQuery}
-      />
-      <SectionList
-        contentContainerStyle={styles.container}
-        sections={sections}
-        keyExtractor={(item) => item._id}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-      />
-    </View>
+    <SectionList
+      contentContainerStyle={styles.container}
+      sections={sections}
+      keyExtractor={(item) => item._id}
+      ListHeaderComponent={
+        <Searchbar
+          style={styles.searchbar}
+          placeholder="Search"
+          onChangeText={setSearchQueryMemoized}
+          value={searchQuery}
+        />
+      }
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    />
   );
 }
 
