@@ -12,8 +12,7 @@ function LoginPage() {
 
   const handleLogin = async () => {
     const action = await dispatch(login({ username, password }));
-    console.log(action)
-    if (action.payload === true) {
+    if (action.payload.username) {
       navigation.navigate('MainPage');
     } else {
       alert(action.payload);

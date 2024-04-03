@@ -3,47 +3,38 @@ import { View, Text, StyleSheet, Button, TouchableOpacity, Image } from 'react-n
 import { useSelector } from 'react-redux';
 
 export default function ProfilePage() {
+  const userInfo = useSelector((state) => state.user.userInfo);
+
+  if (!userInfo) {
+    return <Text>Loading...</Text>;
+  }
+
+  const { username, role } = userInfo || {};
     
   // Sample user data (replace with actual user data)
-  const [user, setUser] = useState({
-    profilePicture: 'https://via.placeholder.com/150',
-    username: 'JohnDoe',
-    theme: 'light',
-    email: 'johndoe@example.com',
-  });
+  // const [user, setUser] = useState({
+  //   profilePicture: 'https://via.placeholder.com/150',
+  //   username: 'JohnDoe',
+  //   theme: 'light',
+  //   email: 'johndoe@example.com',
+  // });
 
-  // Accéder à l'API Redux pour obtenir les informations de l'utilisateur
-//   const userInfo = useSelector(state => state.user.userInfo);
-//   const [user, setUser] = useState({
-//       profilePicture: 'https://via.placeholder.com/150',
-//       username: userInfo.username,
-//       theme: userInfo.theme,
-//       email: userInfo.email,
-//   });
-
-  const changeTheme = () => {
-    setUser({ ...user, theme: user.theme === 'light' ? 'dark' : 'light' });
-  };
-
-  const deleteAccount = () => {
-    // Implement logic to delete user account
-  };
+  // const changeTheme = () => {
+  //   setUser({ ...user, theme: user.theme === 'light' ? 'dark' : 'light' });
+  // };
 
   return (
     <View style={styles.container}>
-      <Image source={{ uri: user.profilePicture }} style={styles.profilePicture} />
+      {/*<Image source={{ uri: user.profilePicture }} style={styles.profilePicture} />*/}
       <Text style={styles.label}>Username:</Text>
-      <Text style={styles.text}>{user.username}</Text>
-      <Text style={styles.label}>Theme:</Text>
-      <Text style={styles.text}>{user.theme}</Text>
-      <Text style={styles.label}>Email:</Text>
-      <Text style={styles.text}>{user.email}</Text>
-      <TouchableOpacity onPress={changeTheme} style={styles.button}>
-        <Text style={styles.buttonText}>Change Theme</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={deleteAccount} style={[styles.button, styles.deleteButton]}>
-        <Text style={styles.buttonText}>Delete Account</Text>
-      </TouchableOpacity>
+      <Text style={styles.text}>{username}</Text>
+      <Text style={styles.label}>Role:</Text>
+      <Text style={styles.text}>{role}</Text>
+      {/*<Text style={styles.label}>Theme:</Text>*/}
+      {/*<Text style={styles.text}>{user.theme}</Text>*/}
+      {/*<TouchableOpacity onPress={changeTheme} style={styles.button}>*/}
+      {/*  <Text style={styles.buttonText}>Change Theme</Text>*/}
+      {/*</TouchableOpacity>*/}
     </View>
   );
 }

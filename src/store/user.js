@@ -6,7 +6,9 @@ export const login = createAsyncThunk('user/login', async ({ username, password 
   try {
     const response = await api.post('/user/login', { username, password });
     await AsyncStorage.setItem('token', response.data.token);
-    return response.data.success;
+    await AsyncStorage.setItem('username', response.data.user.username);
+    await AsyncStorage.setItem('role', response.data.user.role);
+    return response.data.user;
   } catch (error) {
     return error.response.data.message;
   }
@@ -28,6 +30,7 @@ const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(login.fulfilled, (state, action) => {
+      console.log(action.payload);
       state.userInfo = action.payload;
     });
     builder.addCase(signup.fulfilled, (state, action) => {
