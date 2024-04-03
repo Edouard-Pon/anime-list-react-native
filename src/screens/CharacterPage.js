@@ -1,11 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {View, Text, StyleSheet, Image, FlatList, SectionList, ScrollView} from 'react-native';
 import AnimeCard from '../components/AnimeCard';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
+import { fetchAnime } from '../store/anime'; // import fetchAnime
 
 function CharacterPage({ route, navigation }) {
   const { character } = route.params;
   const animeList = useSelector((state) => state.anime.animeList);
+  const dispatch = useDispatch(); // use useDispatch
+
+  useEffect(() => {
+    if (animeList.length === 0 && character.anime.length > 0) {
+      dispatch(fetchAnime());
+    }
+  }, [animeList, character.anime, dispatch]);
 
   const sections = [
     {
