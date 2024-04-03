@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, Image } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Picker } from '@react-native-picker/picker';
+import * as ImagePicker from 'expo-image-picker';
 
 export default function App() {
   const [releaseDate, setChosenDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
   const [status, setStatus] = useState('Ongoing');
   const [rating, setRating] = useState(0);
+  const [errors, setErrors] = useState({});
 
   const handleDateChange = (event, selectedDate) => {
     const currentDate = selectedDate || releaseDate;
@@ -61,12 +63,17 @@ export default function App() {
       return;
     }
 
-    const result = await ImagePicker.launchImageLibraryAsync();
-    
-    if (!result.cancelled) {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
       setFormData({
         ...formData,
-        coverImage: result.uri,
+        coverImage: result.assets[0].uri,
       });
     }
   };
@@ -87,17 +94,20 @@ export default function App() {
         style={styles.input}
         placeholder="Title"
         onChangeText={(text) => handleChange('title', text)}
+        required
       />
       <TextInput
         style={styles.input}
         placeholder="Type"
         onChangeText={(text) => handleChange('type', text)}
+        required
       />
       <TextInput
         style={styles.input}
         placeholder="Episodes"
         onChangeText={(text) => handleChange('episodes', text)}
         keyboardType="numeric"
+        required
       />
 
       <Text >Select Status</Text>
@@ -114,6 +124,7 @@ export default function App() {
         style={styles.input}
         placeholder="Description"
         onChangeText={(text) => handleChange('description', text)}
+        required
       />
 
       <Button title="Choose release date" onPress={showDatePicker} />
@@ -131,17 +142,20 @@ export default function App() {
         style={styles.input}
         placeholder="Source"
         onChangeText={(text) => handleChange('source', text)}
+        required
       />
       <TextInput
         style={styles.input}
         placeholder="External Link"
         onChangeText={(text) => handleChange('externalLink', text)}
+        required
       />
       <TextInput
         style={styles.input}
         placeholder="Duration (hours)"
         onChangeText={(text) => handleChange('duration', text)}
         keyboardType="numeric"
+        required
       />
       <Text >Select Rating</Text>
       <Picker
@@ -154,12 +168,17 @@ export default function App() {
         <Picker.Item label="18+" value="18" />
       </Picker>
 
-      {/* Add input fields for other properties */}
-      <Button title="Upload cover image" onPress={handleImagePick} />
-      {formData.coverImage && (
-        <Image source={{ uri: formData.coverImage }} style={styles.image} />
-      )}
 
+      <Button title="Upload cover image" onPress={handleImagePick} />
+      {formData.coverImage ? (
+        <Image
+          source={{ uri: formData.coverImage }}
+          style={styles.image}
+          onError={(error) => console.error('Image loading error:', error)}
+        />
+      ) : (
+        <Text>No image selected</Text>
+      )}
       <Button title="Create" onPress={handleSubmit} />
     </View>
   );
@@ -184,8 +203,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   image: {
-    width: 200,
-    height: 200,
+    width: 100,
+    height: 100,
     marginVertical: 10,
   },
 });
