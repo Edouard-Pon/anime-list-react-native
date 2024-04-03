@@ -56,22 +56,22 @@ function MainPage({ navigation }) {
   ];
 
   return (
-    <SectionList
+    <ScrollView
       contentContainerStyle={styles.container}
-      sections={sections}
-      keyExtractor={(item) => item._id}
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      }
-      ListHeaderComponent={() => (
-        <Searchbar
-          style={styles.searchbar}
-          placeholder="Search"
-          onChangeText={(search) => setSearchQuery(search)}
-          value={searchQuery}
-        />
-      )}
-    />
+      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+    >
+      <Searchbar
+        placeholder="Search"
+        style={styles.searchbar}
+        onChangeText={(query) => setSearchQuery(query)}
+        value={searchQuery}
+      />
+      <SectionList
+        sections={sections}
+        keyExtractor={(item, index) => item + index}
+        renderItem={({ item }) => item}
+      />
+    </ScrollView>
   );
 }
 

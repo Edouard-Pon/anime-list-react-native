@@ -56,22 +56,30 @@ function CharactersPage({ navigation }) {
   ];
 
   return (
-    <SectionList
-      contentContainerStyle={styles.container}
-      sections={sections}
-      keyExtractor={(item) => item._id}
+    <ScrollView
       refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+        />
       }
-      ListHeaderComponent={() => (
+    >
+      <View style={styles.container}>
         <Searchbar
-          style={styles.searchbar}
           placeholder="Search"
-          onChangeText={(search) => setSearchQuery(search)}
+          onChangeText={setSearchQuery}
           value={searchQuery}
         />
-      )}
-    />
+        <SectionList
+          sections={sections}
+          keyExtractor={(item, index) => item + index}
+          renderItem={({ item }) => item}
+          renderSectionHeader={({ section: { title } }) => (
+            <Text style={{ fontSize: 24, fontWeight: 'bold', margin: 10 }}>{title}</Text>
+          )}
+        />
+      </View>
+    </ScrollView>
   );
 }
 
