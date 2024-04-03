@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, StyleSheet, SectionList, FlatList, RefreshControl, ScrollView } from 'react-native';
+import {Text, View, StyleSheet, SectionList, FlatList, RefreshControl, ScrollView, Dimensions} from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchCharacter } from '../store/character';
 import CharacterCard from '../components/CharacterCard';
@@ -11,6 +11,9 @@ function CharactersPage({ navigation }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredCharacterList, setFilteredCharacterList] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
+  const setSearchQueryMemoized = React.useCallback((search) => {
+    setSearchQuery(search);
+  }, []);
 
   useEffect(() => {
     dispatch(fetchCharacter());
@@ -56,30 +59,22 @@ function CharactersPage({ navigation }) {
   ];
 
   return (
-    <ScrollView
-      refreshControl={
-        <RefreshControl
-          refreshing={refreshing}
-          onRefresh={onRefresh}
-        />
-      }
-    >
-      <View style={styles.container}>
-        <Searchbar
-          placeholder="Search"
-          onChangeText={setSearchQuery}
-          value={searchQuery}
-        />
-        <SectionList
-          sections={sections}
-          keyExtractor={(item, index) => item + index}
-          renderItem={({ item }) => item}
-          renderSectionHeader={({ section: { title } }) => (
-            <Text style={{ fontSize: 24, fontWeight: 'bold', margin: 10 }}>{title}</Text>
-          )}
-        />
-      </View>
-    </ScrollView>
+    <View style={styles.container}>
+      <Searchbar
+        style={styles.searchbar}
+        placeholder="Search"
+        onChangeText={setSearchQueryMemoized}
+        value={searchQuery}
+      />
+      <SectionList
+        contentContainerStyle={styles.container}
+        sections={sections}
+        keyExtractor={(item) => item._id}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      />
+    </View>
   );
 }
 
@@ -88,6 +83,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',
+  },
+  searchbar: {
+    width: Dimensions.get('window').width - 64,
+    marginRight: 16,
+    marginLeft: 16,
+    marginTop: 5
   }
 });
 
