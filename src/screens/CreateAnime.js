@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, Button, Image } from 'react-native';
+import { ScrollView, Text, StyleSheet, TextInput, Button, Image } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Picker } from '@react-native-picker/picker';
 import * as ImagePicker from 'expo-image-picker';
@@ -16,6 +16,42 @@ export default function App() {
     setShowPicker(false);
     setChosenDate(currentDate);
   };
+
+  // const validateForm = () => {
+  //   const errors = {};
+  //   if (!formData.title) {
+  //     errors.title = 'Title is required';
+  //   }
+  //   if (!formData.type) {
+  //     errors.type = 'Type is required';
+  //   }
+  //   if (!formData.episodes) {
+  //     errors.episodes = 'Episodes is required';
+  //   }
+  //   if (!formData.description) {
+  //     errors.description = 'Description is required';
+  //   }
+  //   if (!formData.releaseDate) {
+  //     errors.releaseDate = 'Release date is required';
+  //   }
+  //   if (!formData.source) {
+  //     errors.source = 'Source is required';
+  //   }
+  //   if (!formData.externalLink) {
+  //     errors.externalLink = 'External link is required';
+  //   }
+  //   if (!formData.duration) {
+  //     errors.duration = 'Duration is required';
+  //   }
+  //   if (!formData.rating) {
+  //     errors.rating = 'Rating is required';
+  //   }
+  //   if (!formData.coverImage) {
+  //     errors.coverImage = 'Cover image is required';
+  //   }
+  //   setErrors(errors);
+  //   return Object.keys(errors).length === 0;
+  // };
 
   const showDatePicker = () => {
     setShowPicker(true);
@@ -87,8 +123,24 @@ export default function App() {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
+
       <Text style={styles.title}>Create Anime</Text>
+
+      <Button title="Upload cover image" onPress={handleImagePick} />
+      {formData.coverImage ? (
+        <>
+          <Button title="Clear image" onPress={() => handleChange('coverImage', null)} />
+          <Image
+            source={{ uri: formData.coverImage }}
+            style={styles.image}
+            onError={(error) => console.error('Image loading error:', error)}
+          />
+        </>
+      ) : (
+        <Text>No image selected</Text>
+      )}
+
       <TextInput
         style={styles.input}
         placeholder="Title"
@@ -119,6 +171,7 @@ export default function App() {
         <Picker.Item label="Announced" value="Announced" />
         <Picker.Item label="Out" value="Out" />
       </Picker>
+
       <TextInput
         style={styles.input}
         placeholder="Description"
@@ -157,6 +210,7 @@ export default function App() {
         required
       />
       <Text >Select Rating</Text>
+
       <Picker
         selectedValue={rating}
         style={{ height: 50, width: 200 }}
@@ -166,31 +220,17 @@ export default function App() {
         <Picker.Item label="Teen" value="16" />
         <Picker.Item label="18+" value="18" />
       </Picker>
-
-
-      <Button title="Upload cover image" onPress={handleImagePick} />
-      {formData.coverImage ? (
-        <>
-          <Button title="Clear image" onPress={() => handleChange('coverImage', null)} />
-          <Image
-            source={{ uri: formData.coverImage }}
-            style={styles.image}
-            onError={(error) => console.error('Image loading error:', error)}
-          />
-        </>
-      ) : (
-        <Text>No image selected</Text>
-      )}
-      <Button title="Submit" onPress={handleSubmit} />
-    </View>
+      <Button title="Submit" onPress={handleSubmit} disabled={!formData.title} />
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1, // Use flexGrow to fill the entire ScrollView
     justifyContent: 'center',
     alignItems: 'center',
+    paddingVertical: 20, // Add padding for spacing
   },
   title: {
     fontSize: 24,
@@ -205,8 +245,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   image: {
+    // in a coloured frame
     width: 100,
     height: 100,
     marginVertical: 10,
+    borderWidth: 3,
+    borderColor: 'black',
   },
 });
