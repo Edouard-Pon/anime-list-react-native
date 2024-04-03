@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
-import { Text, View, StyleSheet, SectionList } from 'react-native';
+import {Text, View, StyleSheet, SectionList, FlatList} from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchCharacter } from '../store/character';
 import CharacterCard from '../components/CharacterCard';
+
 
 function CharactersPage({ navigation }) {
   const characterList = useSelector((state) => state.character.characterList);
@@ -15,7 +16,13 @@ function CharactersPage({ navigation }) {
   if(!characterList) return (<View style={styles.container}><Text>Loading...</Text></View>);
 
   const sections = [
-    {title: 'Characters', data: characterList, renderItem: ({item}) => <CharacterCard character={item} navigation={navigation} />}
+    {title: 'Characters', data: characterList, renderItem: ({item}) => <FlatList
+          data={item}
+          numColumns={2}
+          keyExtractor={(item) => item._id}
+          renderItem={({item}) => <CharacterCard character={item} navigation={navigation}
+          />}
+      />}
   ];
 
   return (
@@ -23,9 +30,6 @@ function CharactersPage({ navigation }) {
       <SectionList
         sections={sections}
         keyExtractor={(item) => item._id}
-        renderSectionHeader={({ section: { title } }) => (
-          <Text style={styles.header}>{title}</Text>
-        )}
       />
     </View>
   );
@@ -36,12 +40,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  header: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    padding: 10,
-  },
+    backgroundColor: 'white',
+  }
 });
 
 export default CharactersPage;
