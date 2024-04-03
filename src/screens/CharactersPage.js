@@ -86,9 +86,11 @@ const styles = StyleSheet.create({
   },
   searchbar: {
     width: Dimensions.get('window').width - 64,
-    marginRight: 16,
-    marginLeft: 16,
-    marginTop: 5
+    marginRight: 13,
+    marginLeft: 13,
+    marginTop: 5,
+    backgroundColor: 'rgba(173,120,255,0.38)',
+    borderRadius: 5,
   }
 });
 
