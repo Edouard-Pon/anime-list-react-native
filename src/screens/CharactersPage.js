@@ -16,7 +16,7 @@ function CharactersPage({ navigation }) {
   if(!characterList) return (<View style={styles.container}><Text>Loading...</Text></View>);
 
   const sections = [
-    {title: 'Characters', data: characterList, renderItem: ({item}) => <FlatList
+    {title: 'Characters', data: [characterList], renderItem: ({item}) => <FlatList
           data={item}
           numColumns={2}
           keyExtractor={(item) => item._id}
