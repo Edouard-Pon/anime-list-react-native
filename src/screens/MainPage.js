@@ -1,37 +1,62 @@
-import React, { useEffect } from 'react';
-import {Text, View, StyleSheet, SectionList, FlatList} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Text, View, StyleSheet, SectionList, FlatList } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import AnimeCard from '../components/AnimeCard';
 import { fetchAnime } from '../store/anime';
+import { Searchbar } from 'react-native-paper';
 
 function MainPage({ navigation }) {
   const animeList = useSelector((state) => state.anime.animeList);
   const dispatch = useDispatch();
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filteredAnimeList, setFilteredAnimeList] = useState(null);
 
   useEffect(() => {
     dispatch(fetchAnime());
   }, [dispatch]);
 
-  if (!animeList) return (<View style={styles.container}><Text>Loading...</Text></View>);
+  useEffect(() => {
+    if (animeList) {
+      filterAnimeList(searchQuery);
+    }
+  }, [animeList, searchQuery]);
+
+  const filterAnimeList = (search) => {
+    if (!search) {
+      setFilteredAnimeList(null);
+    } else {
+      const filteredList = animeList.filter((anime) =>
+        anime.title.toLowerCase().includes(search.toLowerCase())
+      );
+      setFilteredAnimeList(filteredList);
+    }
+  };
+
+  if (!animeList) return <View style={styles.container}><Text>Loading...</Text></View>;
 
   const sections = [
-    {title: 'Anime', data: [animeList], renderItem: ({item}) => (
-          <FlatList
-              data={item}
-              numColumns={2}
-              keyExtractor={(item) => item._id}
-              renderItem={({item}) => <AnimeCard anime={item} navigation={navigation}
-              />}
-          />
-      )},
+    {
+      title: 'Anime',
+      data: [filteredAnimeList || animeList],
+      renderItem: ({ item }) => (
+        <FlatList
+          data={item}
+          numColumns={2}
+          keyExtractor={(item) => item._id}
+          renderItem={({ item }) => <AnimeCard anime={item} navigation={navigation} />}
+        />
+      ),
+    },
   ];
 
   return (
     <View style={styles.container}>
-      <SectionList
-        sections={sections}
-        keyExtractor={(item) => item._id}
+      <Searchbar
+        placeholder="Search"
+        onChangeText={(search) => setSearchQuery(search)}
+        value={searchQuery}
       />
+      <SectionList sections={sections} keyExtractor={(item) => item._id} />
     </View>
   );
 }
