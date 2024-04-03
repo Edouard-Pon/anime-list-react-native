@@ -35,6 +35,28 @@ export default function ProfilePage() {
       {/*<TouchableOpacity onPress={changeTheme} style={styles.button}>*/}
       {/*  <Text style={styles.buttonText}>Change Theme</Text>*/}
       {/*</TouchableOpacity>*/}
+
+      {/* three widgets aligned: to-watch, watch, abandoned */}
+      <View style={{ flexDirection: 'row' }}>
+        <View style={{ flex: 1, alignItems: 'center' }}>
+          <TouchableOpacity style={styles.button}>
+            <Text style={styles.buttonText}>To Watch</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={{ flex: 1, alignItems: 'center' }}>
+          <TouchableOpacity style={styles.button}>
+            <Text style={styles.buttonText}>Watched</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={{ flex: 1, alignItems: 'center' }}>
+          <TouchableOpacity style={[styles.button, styles.deleteButton]}>
+            <Text style={styles.buttonText}>Abandoned</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      {/* TODO: When button is clicked, display the appropriate anime AnimeCards */}
+      
     </View>
   );
 }
