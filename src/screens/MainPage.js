@@ -12,6 +12,8 @@ function MainPage({ navigation }) {
     dispatch(fetchAnime());
   }, [dispatch]);
 
+  if (!animeList) return (<View style={styles.container}><Text>Loading...</Text></View>);
+
   const sections = [
     {title: 'Anime', data: animeList, renderItem: ({item}) => <AnimeCard anime={item} navigation={navigation} />},
   ];

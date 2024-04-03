@@ -12,6 +12,8 @@ function CharactersPage({ navigation }) {
     dispatch(fetchCharacter());
   }, [dispatch]);
 
+  if(!characterList) return (<View style={styles.container}><Text>Loading...</Text></View>);
+
   const sections = [
     {title: 'Characters', data: characterList, renderItem: ({item}) => <CharacterCard character={item} navigation={navigation} />}
   ];
