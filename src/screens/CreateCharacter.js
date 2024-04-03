@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {View, TextInput, Button, StyleSheet, Image, Text} from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { useDispatch } from 'react-redux';
+import { createCharacter } from '../store/character';
 import { setName, setOriginalName, setDescription, setImage, setAnime } from '../store/character';
 
 export default function CreateCharacter() {
@@ -30,18 +31,18 @@ export default function CreateCharacter() {
         });
 
         if (!result.canceled) {
-            setImage(result.assets[0].uri);
+            setImage(result.assets[0]);
         }
     };
 
     const handleCreate = async () => {
-        alert('WIP');
-        // const action = await dispatch(createCharacter({ name, originalName, description, image, anime }));
-        // if (action.payload === true) {
-        //   alert('Character created successfully');
-        // } else {
-        //   alert(action.payload);
-        // }
+        const action = await dispatch(createCharacter({ name, originalName, description, image, anime }));
+        console.log(action)
+        if (action.payload !== undefined && action.payload.name) {
+          alert('Character created successfully');
+        } else {
+          alert('Error creating character');
+        }
     };
 
     return (
@@ -75,7 +76,7 @@ export default function CreateCharacter() {
                 <>
                     <Button title="Clear image" onPress={() => setImage(null)} />
                     <Image
-                        source={{ uri: image }}
+                        source={{ uri: image.uri }}
                         style={styles.image}
                         onError={(error) => console.error('Image loading error:', error)}
                     />
