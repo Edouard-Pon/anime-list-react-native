@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
 import { ScrollView, Text, StyleSheet, TextInput, Button, Image } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { Picker } from '@react-native-picker/picker';
+import DropDownPicker from 'react-native-dropdown-picker';
 import * as ImagePicker from 'expo-image-picker';
+
+// Utiliser des DropDownPicker dans un ScrollView peut causer des erreurs askip
+// Pour les ignorer, ajouter le code suivant 
+// Bancal mais t'inquiète 
+import { LogBox } from 'react-native';
+LogBox.ignoreLogs(['VirtualizedLists should never be nested inside plain ScrollViews']);
 
 export default function App() {
   const [releaseDate, setChosenDate] = useState(new Date());
@@ -10,6 +16,22 @@ export default function App() {
   const [status, setStatus] = useState('Ongoing');
   const [rating, setRating] = useState(0);
   const [errors, setErrors] = useState({});
+
+  const [openStatus, setOpenStatus] = useState(false);
+  const [valueStatus, setValueStatus] = useState(null);
+  const [itemsStatus, setItemsStatus] = useState([
+    { label: 'Ongoing', value: 'Ongoing' },
+    { label: 'Finished', value: 'Finished' },
+    { label: 'Announced', value: 'Announced' },
+  ]);
+
+  const [openRating, setOpenRating] = useState(false);
+  const [valueRating, setValueRating] = useState(null);
+  const [itemsRating, setItemsRating] = useState([
+    { label: 'Family Friendly', value: 'Family Friendly' },
+    { label: 'Teen', value: 'Teen' },
+    { label: 'Mature', value: 'Mature' },
+  ]);
 
   const handleDateChange = (event, selectedDate) => {
     const currentDate = selectedDate || releaseDate;
@@ -127,7 +149,6 @@ export default function App() {
 
       <Text style={styles.title}>Create Anime</Text>
 
-      <Button title="Upload cover image" onPress={handleImagePick} />
       {formData.coverImage ? (
         <>
           <Button title="Clear image" onPress={() => handleChange('coverImage', null)} />
@@ -138,7 +159,10 @@ export default function App() {
           />
         </>
       ) : (
-        <Text>No image selected</Text>
+        <>
+          <Button title="Upload cover image" onPress={handleImagePick} />
+          <Text>No image selected</Text>
+        </>
       )}
 
       <TextInput
@@ -162,15 +186,16 @@ export default function App() {
       />
 
       <Text >Select Status</Text>
-      <Picker
-        selectedValue={status}
-        style={{ height: 50, width: 200 }}
+      <DropDownPicker
+        open={openStatus}
+        value={valueStatus}
+        items={itemsStatus}
+        style={styles.input}
+        setOpen={setOpenStatus}
+        setValue={setValueStatus}
+        setItems={setItemsStatus}
         onValueChange={(itemValue, itemIndex) => handleStatusChange(itemValue)}
-      >
-        <Picker.Item label="Ongoing" value="Ongoing" />
-        <Picker.Item label="Announced" value="Announced" />
-        <Picker.Item label="Out" value="Out" />
-      </Picker>
+      />
 
       <TextInput
         style={styles.input}
@@ -209,17 +234,19 @@ export default function App() {
         keyboardType="numeric"
         required
       />
-      <Text >Select Rating</Text>
 
-      <Picker
-        selectedValue={rating}
-        style={{ height: 50, width: 200 }}
+      <Text >Select Rating</Text>
+      <DropDownPicker
+        open={openRating}
+        value={valueRating}
+        items={itemsRating}
+        style={styles.input}
+        setOpen={setOpenRating}
+        setValue={setValueRating}
+        setItems={setItemsRating}
         onValueChange={(itemValue, itemIndex) => handleRatingChange(itemValue)}
-      >
-        <Picker.Item label="Family Friendly" value="13" />
-        <Picker.Item label="Teen" value="16" />
-        <Picker.Item label="18+" value="18" />
-      </Picker>
+      />
+
       <Button title="Submit" onPress={handleSubmit} disabled={!formData.title} />
     </ScrollView>
   );
@@ -243,6 +270,8 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     borderWidth: 1,
     paddingHorizontal: 10,
+    // center the inputs:
+    alignSelf: 'center',
   },
   image: {
     // in a coloured frame
