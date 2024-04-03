@@ -88,7 +88,9 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width - 64,
     marginRight: 16,
     marginLeft: 16,
-    marginTop: 5
+    marginTop: 5,
+    backgroundColor: 'rgba(173,120,255,0.38)',
+    borderRadius: 5,
   }
 });
 
