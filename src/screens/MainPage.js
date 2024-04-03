@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, SectionList, FlatList, RefreshControl, ScrollView } from 'react-native';
+import {Text, View, StyleSheet, SectionList, FlatList, RefreshControl, ScrollView, Dimensions} from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import AnimeCard from '../components/AnimeCard';
 import { fetchAnime } from '../store/anime';
@@ -11,6 +11,9 @@ function MainPage({ navigation }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredAnimeList, setFilteredAnimeList] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
+  const setSearchQueryMemoized = React.useCallback((search) => {
+    setSearchQuery(search);
+  }, []);
 
   useEffect(() => {
     dispatch(fetchAnime());
@@ -56,22 +59,22 @@ function MainPage({ navigation }) {
   ];
 
   return (
-    <ScrollView
-      contentContainerStyle={styles.container}
-      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-    >
+    <View style={styles.container}>
       <Searchbar
-        placeholder="Search"
         style={styles.searchbar}
-        onChangeText={(query) => setSearchQuery(query)}
+        placeholder="Search"
+        onChangeText={setSearchQueryMemoized}
         value={searchQuery}
       />
       <SectionList
+        contentContainerStyle={styles.container}
         sections={sections}
-        keyExtractor={(item, index) => item + index}
-        renderItem={({ item }) => item}
+        keyExtractor={(item) => item._id}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
       />
-    </ScrollView>
+    </View>
   );
 }
 
@@ -82,6 +85,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   searchbar: {
+    width: Dimensions.get('window').width - 64,
     marginRight: 16,
     marginLeft: 16,
     marginTop: 5
