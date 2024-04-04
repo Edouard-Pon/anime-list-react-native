@@ -65,10 +65,13 @@ function CharactersPage({ navigation }) {
       keyExtractor={(item) => item._id}
       ListHeaderComponent={
         <Searchbar
-          style={styles.searchbar}
-          placeholder="Search"
-          onChangeText={setSearchQueryMemoized}
-          value={searchQuery}
+            style={styles.searchbar}
+            placeholder="Search"
+            placeholderTextColor={'white'}
+            onChangeText={setSearchQueryMemoized}
+            value={searchQuery}
+            color='white'
+            iconColor='white'
         />
       }
       refreshControl={
@@ -87,10 +90,10 @@ const styles = StyleSheet.create({
   },
   searchbar: {
     width: Dimensions.get('window').width - 64,
-    marginRight: 13,
-    marginLeft: 13,
+    marginRight: 16,
+    marginLeft: 16,
     marginTop: 5,
-    backgroundColor: 'rgba(173,120,255,0.38)',
+    backgroundColor: 'rgba(255, 155, 155, 0.7)',
     borderRadius: 5,
   }
 });
