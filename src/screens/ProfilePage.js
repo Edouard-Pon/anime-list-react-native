@@ -27,18 +27,6 @@ export default function ProfilePage({ navigation }) {
   };
 
   const { username, role } = userInfo || {};
-    
-  // Sample user data (replace with actual user data)
-  // const [user, setUser] = useState({
-  //   profilePicture: 'https://via.placeholder.com/150',
-  //   username: 'JohnDoe',
-  //   theme: 'light',
-  //   email: 'johndoe@example.com',
-  // });
-
-  // const changeTheme = () => {
-  //   setUser({ ...user, theme: user.theme === 'light' ? 'dark' : 'light' });
-  // };
 
   return (
     <View style={styles.container}>
