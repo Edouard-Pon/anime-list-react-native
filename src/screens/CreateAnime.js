@@ -94,7 +94,7 @@ export default function CreateAnime() {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
-      aspect: [4, 3],
+      aspect: [3, 4],
       quality: 1,
     });
 
@@ -270,6 +270,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingVertical: 20,
+    gap: 25,
   },
   title: {
     fontSize: 24,
@@ -279,10 +280,10 @@ const styles = StyleSheet.create({
   input: {
     width: '80%',
     height: 40,
-    marginVertical: 10,
-    borderWidth: 1,
-    paddingHorizontal: 10,
     alignSelf: 'center',
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderRadius: 5,
   },
   image: {
     width: 100,
