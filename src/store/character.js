@@ -7,6 +7,11 @@ export const fetchCharacter = createAsyncThunk('character/fetchCharacter', async
   return response.data.character;
 });
 
+export const searchCharacter = createAsyncThunk('character/searchCharacter', async (query) => {
+  const response = await api.post('/character/search', { name: query });
+  return response.data.character;
+});
+
 export const createCharacter = createAsyncThunk('character/createCharacter', async (character) => {
   try {
     const { name, originalName, description, image } = character;
@@ -45,6 +50,8 @@ const initialState = {
   description: '',
   image: null,
   anime: [],
+  searchResults: [],
+  characterList: [],
 };
 
 const characterSlice = createSlice({
@@ -73,6 +80,9 @@ const characterSlice = createSlice({
     });
     builder.addCase(createCharacter.fulfilled, (state, action) => {
       state.character = action.payload;
+    });
+    builder.addCase(searchCharacter.fulfilled, (state, action) => {
+      state.searchResults = action.payload;
     });
   },
 });
