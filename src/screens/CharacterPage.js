@@ -20,15 +20,17 @@ function CharacterPage({ route, navigation }) {
       title: 'Anime',
       data: [animeList.filter((anime) => character.anime.includes(anime._id))],
       renderItem: ({ item }) => (
-        <FlatList
-          data={item}
-          numColumns={2}
-          keyExtractor={(item) => item._id}
-          renderItem={({ item }) => <AnimeCard anime={item} navigation={navigation} />}
-          ListHeaderComponent={() => (
-            <Text style={styles.relatedAnimes}>Appears in: </Text>
-          )}
-        />
+        item.length > 0 ? (
+          <FlatList
+            data={item}
+            numColumns={2}
+            keyExtractor={(item) => item._id}
+            renderItem={({ item }) => <AnimeCard anime={item} navigation={navigation} />}
+            ListHeaderComponent={() => (
+              <Text style={styles.relatedAnimes}>Appears in: </Text>
+            )}
+          />
+        ) : null
       ),
     },
   ];
@@ -46,9 +48,18 @@ function CharacterPage({ route, navigation }) {
           <View style={styles.imageAndTextContainer}>
             <Image style={styles.image} source={{ uri: character.imagePath }} />
             <View style={styles.textContainer}>
-              <Text style={styles.text}>Original Name: {character.originalName}</Text>
-              <Text style={styles.text}>Description: {character.description}</Text>
-              <Text style={styles.text}>Upload Date: {new Date(character.uploadDate).toLocaleDateString('en-GB')}</Text>
+              <View style={styles.item}>
+                <Text style={styles.label}>Original Name:</Text>
+                <Text style={styles.text}>{character.originalName}</Text>
+              </View>
+              <View style={styles.item}>
+                <Text style={styles.label}>Description:</Text>
+                <Text style={styles.text}>{character.description}</Text>
+              </View>
+              <View style={styles.item}>
+                <Text style={styles.label}>Upload Date:</Text>
+                <Text style={styles.text}>{new Date(character.uploadDate).toLocaleDateString('en-GB')}</Text>
+              </View>
             </View>
           </View>
         </View>
@@ -68,8 +79,9 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   imageAndTextContainer: {
+    width: Dimensions.get('window').width - 32,
     flexDirection: 'row',
-    alignItems: 'flex-start',
+    marginBottom: 16,
   },
   image: {
     width: 160,
@@ -80,18 +92,27 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     marginLeft: 16,
+    gap: 16,
+  },
+  item: {
+    display: 'flex',
+    flexDirection: 'column',
+    marginRight: 10,
   },
   text: {
+    fontSize: 16,
+    fontFamily: 'Pacifico',
+    color: '#333',
+  },
+  label: {
     fontSize: 18,
     fontFamily: 'Pacifico',
     color: '#333',
-    marginBottom: 10,
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     fontFamily: 'Pacifico',
-    marginBottom: 10,
   },
   relatedAnimes: {
     marginTop: 16,
@@ -100,7 +121,5 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 });
-
-
 
 export default CharacterPage;
