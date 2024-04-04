@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {ScrollView, Text, StyleSheet, TextInput, Button, Image, TouchableOpacity, View, Dimensions} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { ScrollView, Text, StyleSheet, TextInput, Button, Image, TouchableOpacity, View, Dimensions } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import DropDownPicker from 'react-native-dropdown-picker';
 import * as ImagePicker from 'expo-image-picker';
@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Autocomplete from 'react-native-autocomplete-input';
 import { createAnime, setFormData } from '../store/anime';
 import { searchCharacter } from '../store/character';
+import { FlatList } from 'react-native-gesture-handler';
 
 import { LogBox } from 'react-native';
 LogBox.ignoreLogs(['VirtualizedLists should never be nested inside plain ScrollViews']);
@@ -32,6 +33,7 @@ export default function CreateAnime() {
   const [characterQuery, setCharacterQuery] = useState('');
   const [characterSearchResults, setCharacterSearchResults] = useState([]);
   const [hideCharacterResults, setHideCharacterResults] = useState(true);
+  const [showDatePicker, setShowDatePicker] = useState(false);
 
   useEffect(() => {
     if (characterQuery.length > 2) {
@@ -78,7 +80,8 @@ export default function CreateAnime() {
   const handleDateChange = (event, selectedDate) => {
     const currentDate = selectedDate || new Date(releaseDate || Date.now());
     setReleaseDate(currentDate.toISOString());
-  };
+    setShowDatePicker(false);
+  };  
 
   const handleImagePick = async () => {
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -141,7 +144,7 @@ export default function CreateAnime() {
       )}
 
       <Autocomplete
-        style={{width: Dimensions.get('window').width * 0.6}}
+        style={{ width: Dimensions.get('window').width * 0.6 }}
         hideResults={hideCharacterResults}
         autoCapitalize="none"
         autoCorrect={false}
@@ -151,7 +154,7 @@ export default function CreateAnime() {
         onChangeText={(text) => handleCharacterQueryChange(text)}
         flatListProps={{
           keyExtractor: (item) => item._id,
-          renderItem: ({item}) => (
+          renderItem: ({ item }) => (
             <TouchableOpacity onPress={() => handleCharacterSelection(item._id)}>
               <Text>{item.name}</Text>
             </TouchableOpacity>
@@ -210,14 +213,16 @@ export default function CreateAnime() {
         required
       />
 
-      <DateTimePicker
-        value={releaseDate ? new Date(releaseDate) : new Date()}
-        mode="date"
-        display="calendar"
-        onChange={handleDateChange}
-      />
-
-      <Text>Release Date: {releaseDate ? new Date(releaseDate).toLocaleDateString() : new Date().toLocaleDateString()}</Text>
+      <Button title="Pick Release Date" onPress={() => setShowDatePicker(true)} />
+      {showDatePicker && (
+        <DateTimePicker
+          value={releaseDate ? new Date(releaseDate) : new Date()}
+          mode="date"
+          display="calendar"
+          onChange={handleDateChange}
+        />
+      )}
+      <Text>Release Date: {releaseDate ? new Date(releaseDate).toLocaleDateString() : 'No date selected'}</Text>
 
       <TextInput
         style={styles.input}
