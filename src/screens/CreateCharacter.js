@@ -202,13 +202,14 @@ const styles = StyleSheet.create({
     marginTop: 10,
     backgroundColor: '#fdcdd3',
     borderBottomColor: '#d2a5ac',
+    opacity: 0.5,
   },
   buttonContainer: {
     marginTop: 10,
     marginBottom: 16,
   },
   button: {
-    backgroundColor: 'rgba(173,120,255,0.58)',
+    backgroundColor: 'rgba(255, 155, 155, 0.7)',
     borderRadius: 5,
     padding: 10,
     alignItems: 'center',
@@ -222,6 +223,7 @@ const styles = StyleSheet.create({
     borderBottomColor: '#d2a5ac',
     padding: 8,
     textAlignVertical: 'top',
-    backgroundColor: '#fdcdd3'
+    backgroundColor: '#fdcdd3',
+    opacity: 0.5,
   },
 });
