@@ -61,7 +61,7 @@ export default function ProfilePage({ navigation }) {
           <Text style={styles.buttonText}>View Favorite Anime</Text>
         </TouchableOpacity>
         <View style={styles.animes}>
-          {anime.filter((animeItem) =>
+          {animeList && animeList.favorites !== undefined && animeList.favorites && anime.filter((animeItem) =>
             animeList.favorites.some(favorite => favorite.animeId === animeItem._id)
           ).map((animeItem) => (
             <AnimeCard key={animeItem._id} anime={animeItem} navigation={navigation} />
