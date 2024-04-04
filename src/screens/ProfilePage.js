@@ -1,12 +1,23 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Button, TouchableOpacity, Image } from 'react-native';
+import React, {useEffect, useState} from 'react';
+import { View, Text, StyleSheet, Button, TouchableOpacity, Image, ScrollView } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {logout} from "../store/user";
 import AnimeCard from '../components/AnimeCard';
+import {fetchAnimeList} from "../store/animeList";
+import {fetchAnime} from "../store/anime";
 
 export default function ProfilePage({ navigation }) {
   const dispatch = useDispatch();
   const userInfo = useSelector((state) => state.user.userInfo);
+  const animeList = useSelector((state) => state.animeList.animeList);
+  const anime = useSelector((state) => state.anime.animeList);
+
+  useEffect(() => {
+    if (userInfo) {
+      dispatch(fetchAnimeList());
+      dispatch(fetchAnime());
+    }
+  }, [userInfo]);
 
   if (!userInfo) {
     return (
@@ -29,27 +40,35 @@ export default function ProfilePage({ navigation }) {
   const { username, role } = userInfo || {};
 
   return (
-    <View style={styles.container}>
-      <TouchableOpacity style={styles.button} onPress={handleLogout}>
-        <Text style={styles.buttonText}>Logout</Text>
-      </TouchableOpacity>
-      {/*<Image source={{ uri: user.profilePicture }} style={styles.profilePicture} />*/}
-      <Text style={styles.label}>Username:</Text>
-      <Text style={styles.text}>{username}</Text>
-      <Text style={styles.label}>Role:</Text>
-      <Text style={styles.text}>{role}</Text>
-      {/*<Text style={styles.label}>Theme:</Text>*/}
-      {/*<Text style={styles.text}>{user.theme}</Text>*/}
-      {/*<TouchableOpacity onPress={changeTheme} style={styles.button}>*/}
-      {/*  <Text style={styles.buttonText}>Change Theme</Text>*/}
-      {/*</TouchableOpacity>*/}
+    <ScrollView>
+      <View style={styles.container}>
+        <TouchableOpacity style={styles.button} onPress={handleLogout}>
+          <Text style={styles.buttonText}>Logout</Text>
+        </TouchableOpacity>
+        {/*<Image source={{ uri: user.profilePicture }} style={styles.profilePicture} />*/}
+        <Text style={styles.label}>Username:</Text>
+        <Text style={styles.text}>{username}</Text>
+        <Text style={styles.label}>Role:</Text>
+        <Text style={styles.text}>{role}</Text>
+        {/*<Text style={styles.label}>Theme:</Text>*/}
+        {/*<Text style={styles.text}>{user.theme}</Text>*/}
+        {/*<TouchableOpacity onPress={changeTheme} style={styles.button}>*/}
+        {/*  <Text style={styles.buttonText}>Change Theme</Text>*/}
+        {/*</TouchableOpacity>*/}
 
-      {/* Add a button to display favorite animeCards under profile */}
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>View Favorite Anime</Text>
-      </TouchableOpacity>
-
-    </View>
+        {/* Add a button to display favorite animeCards under profile */}
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>View Favorite Anime</Text>
+        </TouchableOpacity>
+        <View style={styles.animes}>
+          {anime.filter((animeItem) =>
+            animeList.favorites.some(favorite => favorite.animeId === animeItem._id)
+          ).map((animeItem) => (
+            <AnimeCard key={animeItem._id} anime={animeItem} navigation={navigation} />
+          ))}
+        </View>
+      </View>
+    </ScrollView>
   );
 }
 
@@ -59,6 +78,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 10,
+    marginTop: 20,
+    marginBottom: 20,
   },
   profilePicture: {
     width: 150,
@@ -88,4 +109,9 @@ const styles = StyleSheet.create({
   deleteButton: {
     backgroundColor: 'red',
   },
+  animes: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  }
 });
