@@ -23,14 +23,14 @@ function SignupPage() {
 
   return (
       <View style={styles.container}>
-        <Text>Username</Text>
+
         <TextInput
             style={styles.input}
             placeholder="Username"
             value={username}
             onChangeText={setUsername}
         />
-        <Text>Password</Text>
+
         <TextInput
             style={styles.input}
             placeholder="Password"
