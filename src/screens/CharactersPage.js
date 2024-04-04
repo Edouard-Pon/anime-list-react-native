@@ -80,9 +80,10 @@ function CharactersPage({ navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: 'center',
+    justifyContent: 'top',
     alignItems: 'center',
     backgroundColor: 'white',
+    height: Dimensions.get('window').height,
   },
   searchbar: {
     width: Dimensions.get('window').width - 64,
