@@ -1,19 +1,35 @@
 import React, { useEffect } from 'react';
-import {View, Text, StyleSheet, Image, FlatList, Dimensions, SectionList} from 'react-native';
+import {View, Text, StyleSheet, Image, FlatList, Dimensions, SectionList, TouchableOpacity} from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchCharacter } from '../store/character';
 import CharacterCard from '../components/CharacterCard';
+import { MaterialIcons } from '@expo/vector-icons';
+import { addToFavorites, fetchAnimeList } from '../store/animeList';
 
 function AnimePage({ route, navigation }) {
   const { anime } = route.params;
   const characterList = useSelector((state) => state.character.characterList);
+  const animeList = useSelector((state) => state.animeList.animeList);
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (characterList.length === 0 && anime.character.length > 0) {
       dispatch(fetchCharacter());
     }
-  }, [characterList, anime.character, dispatch]);
+    if (animeList.length === 0) {
+      dispatch(fetchAnimeList());
+    }
+  }, [characterList, anime.character, dispatch, animeList]);
+
+  const handleAddToFavorites = () => {
+    dispatch(addToFavorites(anime._id));
+  }
+
+  console.log(animeList.favorites)
+
+  const isFavorite = animeList.favorites ? animeList.favorites.some(item => item.animeId === anime._id) : false;
+
+  console.log(isFavorite)
 
   const sections = [
     {
@@ -44,6 +60,9 @@ function AnimePage({ route, navigation }) {
         <View style={styles.container}>
           <View style={styles.titleContainer}>
             <Text style={styles.title}>{anime.title}</Text>
+            <TouchableOpacity onPress={handleAddToFavorites}>
+              <MaterialIcons name={isFavorite ? "favorite" : "favorite-border"} size={24} color="black" />
+            </TouchableOpacity>
           </View>
           <View style={styles.imageAndTextContainer}>
             <Image style={styles.image} source={{ uri: anime.coverImagePath }} />
@@ -75,8 +94,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   titleContainer: {
-    marginTop: 16,
+    width: Dimensions.get('window').width - 64,
+    marginTop: 32,
     marginBottom: 16,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   imageAndTextContainer: {
     width: Dimensions.get('window').width - 32,
