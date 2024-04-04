@@ -11,8 +11,12 @@ export default function ProfilePage({ navigation }) {
     return (
       <View style={styles.container}>
         <Text style={styles.text}>Please log in to view your profile.</Text>
-        <Button title="Log In" onPress={() => navigation.navigate('LoginPage')} />
-        <Button title="Signup" onPress={() => navigation.navigate('SignupPage')} />
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('LoginPage')}>
+          <Text style={styles.buttonText}>Log In</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('SignupPage')}>
+          <Text style={styles.buttonText}>Signup</Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -81,6 +85,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    gap: 10,
   },
   profilePicture: {
     width: 150,
@@ -98,15 +103,14 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   button: {
-    backgroundColor: '#007bff',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
+    backgroundColor: 'rgba(255, 155, 155, 0.7)',
     borderRadius: 5,
-    marginBottom: 10,
+    padding: 15,
+    alignItems: 'center',
+    width: '80%',
   },
   buttonText: {
-    color: '#fff',
-    fontSize: 16,
+    color: 'white',
   },
   deleteButton: {
     backgroundColor: 'red',
