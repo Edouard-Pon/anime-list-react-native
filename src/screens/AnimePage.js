@@ -5,12 +5,24 @@ import { fetchCharacter } from '../store/character';
 import CharacterCard from '../components/CharacterCard';
 import { MaterialIcons } from '@expo/vector-icons';
 import { addToFavorites, fetchAnimeList } from '../store/animeList';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import {deleteAnime} from "../store/anime";
 
 function AnimePage({ route, navigation }) {
   const { anime } = route.params;
   const characterList = useSelector((state) => state.character.characterList);
   const animeList = useSelector((state) => state.animeList.animeList);
   const dispatch = useDispatch();
+  const [role, setRole] = React.useState(null);
+
+  React.useEffect(() => {
+    const fetchRole = async () => {
+      const userRole = await AsyncStorage.getItem('role');
+      setRole(userRole);
+    };
+
+    fetchRole();
+  }, []);
 
   useEffect(() => {
     if (characterList.length === 0 && anime.character.length > 0) {
@@ -23,6 +35,11 @@ function AnimePage({ route, navigation }) {
 
   const handleAddToFavorites = () => {
     dispatch(addToFavorites(anime._id));
+  }
+
+  const handleDeleteAnime = () => {
+    dispatch(deleteAnime(anime._id));
+    navigation.navigate('MainPage');
   }
 
   console.log(animeList.favorites)
@@ -81,6 +98,11 @@ function AnimePage({ route, navigation }) {
             <Text style={styles.text}>Source: {anime.source}</Text>
             <Text style={styles.text}>External Link: {anime.externalLink}</Text>
           </View>
+          {role === 'admin' ? (
+            <TouchableOpacity style={[styles.deleteButton]} onPress={handleDeleteAnime}>
+              <Text style={styles.buttonText}>DELETE</Text>
+            </TouchableOpacity>
+          ) : null}
         </View>
       )}
     />
@@ -145,6 +167,13 @@ const styles = StyleSheet.create({
     marginTop: 16,
     fontSize: 24,
     fontFamily: 'Pacifico',
+    marginBottom: 10,
+  },
+  deleteButton: {
+    backgroundColor: 'red',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
     marginBottom: 10,
   },
 });

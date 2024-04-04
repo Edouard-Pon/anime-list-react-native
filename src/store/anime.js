@@ -52,6 +52,23 @@ export const createAnime = createAsyncThunk('anime/createAnime', async (anime) =
   }
 });
 
+export const deleteAnime = createAsyncThunk('anime/deleteAnime', async (animeId) => {
+  try {
+    const token = await AsyncStorage.getItem('token');
+    const response = await api({
+      method: 'delete',
+      url: `/anime/${animeId}`,
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    return animeId;
+  } catch (e) {
+    return e.response.status === 403 ? e.response.data.message : '403 Forbidden';
+  }
+});
+
 export const animeSlice = createSlice({
   name: 'anime',
   initialState: {
@@ -68,6 +85,9 @@ export const animeSlice = createSlice({
     });
     builder.addCase(searchAnime.fulfilled, (state, action) => {
       state.searchResults = action.payload;
+    });
+    builder.addCase(deleteAnime.fulfilled, (state, action) => {
+      state.animeList = state.animeList.filter((anime) => anime._id !== action.payload);
     });
   },
 });
