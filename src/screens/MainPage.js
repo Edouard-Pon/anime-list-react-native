@@ -67,8 +67,11 @@ function MainPage({ navigation }) {
         <Searchbar
           style={styles.searchbar}
           placeholder="Search"
+          placeholderTextColor={'white'}
           onChangeText={setSearchQueryMemoized}
           value={searchQuery}
+          color='white'
+          iconColor='white'
         />
       }
       refreshControl={
@@ -89,7 +92,7 @@ const styles = StyleSheet.create({
     marginRight: 16,
     marginLeft: 16,
     marginTop: 5,
-    backgroundColor: 'rgba(173,120,255,0.38)',
+    backgroundColor: 'rgba(255, 155, 155, 0.7)',
     borderRadius: 5,
   }
 });
