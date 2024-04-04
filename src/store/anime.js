@@ -7,11 +7,14 @@ export const fetchAnime = createAsyncThunk('anime/fetchAnime', async () => {
   return response.data.anime;
 });
 
+export const searchAnime = createAsyncThunk('anime/searchAnime', async (query) => {
+  const response = await api.post('/anime/search', { title: query });
+  return response.data.anime;
+});
+
 export const createAnime = createAsyncThunk('anime/createAnime', async (anime) => {
   try {
     const token = await AsyncStorage.getItem('token');
-
-    console.log(anime)
 
     let formData = new FormData();
     formData.append('title', anime.title);
@@ -24,7 +27,7 @@ export const createAnime = createAsyncThunk('anime/createAnime', async (anime) =
     formData.append('externalLink', anime.externalLink);
     formData.append('duration', anime.duration);
     formData.append('rating', anime.rating);
-    // formData.append('character', anime.character);
+    formData.append('character', JSON.stringify(anime.character));
     formData.append('cover', {
       uri: anime.cover.uri,
       type: anime.cover.type,
@@ -54,45 +57,7 @@ export const animeSlice = createSlice({
   initialState: {
     animeList: [],
     animeInfo: null,
-    formData: {
-      title: '',
-      type: '',
-      episodes: '',
-      status: '',
-      description: '',
-      releaseDate: '',
-      source: '',
-      externalLink: '',
-      cover: null,
-      genres: '',
-      themes: '',
-      duration: '',
-      rating: '',
-      character: [],
-    },
-  },
-  reducers: {
-    setFormData: (state, action) => {
-      state.formData = { ...state.formData, ...action.payload };
-    },
-    resetFormData: (state) => {
-      state.formData = {
-        title: '',
-        type: '',
-        episodes: '',
-        status: 'Ongoing',
-        description: '',
-        releaseDate: new Date(),
-        source: '',
-        externalLink: '',
-        cover: null,
-        genres: '',
-        themes: '',
-        duration: '',
-        rating: '',
-        character: '',
-      };
-    },
+    searchResults: [],
   },
   extraReducers: (builder) => {
     builder.addCase(fetchAnime.fulfilled, (state, action) => {
@@ -100,22 +65,9 @@ export const animeSlice = createSlice({
     });
     builder.addCase(createAnime.fulfilled, (state, action) => {
       // state.animeList = [...state.animeList, action.payload];
-      state.formData = {
-        title: '',
-        type: '',
-        episodes: '',
-        status: '',
-        description: '',
-        releaseDate: '',
-        source: '',
-        externalLink: '',
-        cover: null,
-        genres: '',
-        themes: '',
-        duration: '',
-        rating: '',
-        character: '',
-      };
+    });
+    builder.addCase(searchAnime.fulfilled, (state, action) => {
+      state.searchResults = action.payload;
     });
   },
 });

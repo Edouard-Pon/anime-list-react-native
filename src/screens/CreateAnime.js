@@ -1,10 +1,12 @@
-import React, {useState} from 'react';
-import { ScrollView, Text, StyleSheet, TextInput, Button, Image } from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {ScrollView, Text, StyleSheet, TextInput, Button, Image, TouchableOpacity, View, Dimensions} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import DropDownPicker from 'react-native-dropdown-picker';
 import * as ImagePicker from 'expo-image-picker';
 import { useDispatch, useSelector } from 'react-redux';
+import Autocomplete from 'react-native-autocomplete-input';
 import { createAnime, setFormData } from '../store/anime';
+import { searchCharacter } from '../store/character';
 
 import { LogBox } from 'react-native';
 LogBox.ignoreLogs(['VirtualizedLists should never be nested inside plain ScrollViews']);
@@ -27,6 +29,36 @@ export default function CreateAnime() {
   const [rating, setRating] = useState('');
   const [character, setCharacter] = useState([]);
 
+  const [characterQuery, setCharacterQuery] = useState('');
+  const [characterSearchResults, setCharacterSearchResults] = useState([]);
+  const [hideCharacterResults, setHideCharacterResults] = useState(true);
+
+  useEffect(() => {
+    if (characterQuery.length > 2) {
+      dispatch(searchCharacter(characterQuery)).then((action) => {
+        if (action.payload) {
+          setCharacterSearchResults(action.payload);
+        }
+      });
+    }
+  }, [characterQuery, dispatch]);
+
+  const handleCharacterSelection = (id) => {
+    setCharacter((prevCharacter) => {
+      if (prevCharacter.includes(id)) {
+        return prevCharacter.filter((characterId) => characterId !== id);
+      } else {
+        return [...prevCharacter, id];
+      }
+    });
+  };
+
+  const handleCharacterQueryChange = (text) => {
+    setCharacterQuery(text);
+    if (text.length > 2) setHideCharacterResults(false);
+    else setHideCharacterResults(true);
+  };
+
   const [openRating, setOpenRating] = useState(false);
   const [valueRating, setValueRating] = useState(null);
   const [itemsRating, setItemsRating] = useState([
@@ -39,7 +71,7 @@ export default function CreateAnime() {
   const [valueStatus, setValueStatus] = useState(null);
   const [itemsStatus, setItemsStatus] = useState([
     { label: 'Ongoing', value: 'Ongoing' },
-    { label: 'Finished', value: 'Finished' },
+    { label: 'Out', value: 'Out' },
     { label: 'Announced', value: 'Announced' },
   ]);
 
@@ -107,6 +139,34 @@ export default function CreateAnime() {
           <Text>No image selected</Text>
         </>
       )}
+
+      <Autocomplete
+        style={{width: Dimensions.get('window').width * 0.6}}
+        hideResults={hideCharacterResults}
+        autoCapitalize="none"
+        autoCorrect={false}
+        placeholder={'Search character...'}
+        data={characterSearchResults}
+        value={characterQuery}
+        onChangeText={(text) => handleCharacterQueryChange(text)}
+        flatListProps={{
+          keyExtractor: (item) => item._id,
+          renderItem: ({item}) => (
+            <TouchableOpacity onPress={() => handleCharacterSelection(item._id)}>
+              <Text>{item.name}</Text>
+            </TouchableOpacity>
+          ),
+        }}
+      />
+
+      <View>
+        {character.map((characterId) => {
+          const selectedCharacter = characterSearchResults.find((character) => character._id === characterId);
+          return (
+            <Text key={characterId}>{selectedCharacter.name}</Text>
+          );
+        })}
+      </View>
 
       <TextInput
         style={styles.input}
