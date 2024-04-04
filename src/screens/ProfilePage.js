@@ -1,13 +1,25 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Button, TouchableOpacity, Image } from 'react-native';
-import { useSelector } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {logout} from "../store/user";
 
-export default function ProfilePage() {
+export default function ProfilePage({ navigation }) {
+  const dispatch = useDispatch();
   const userInfo = useSelector((state) => state.user.userInfo);
 
   if (!userInfo) {
-    return <Text>Loading...</Text>;
+    return (
+      <View style={styles.container}>
+        <Text style={styles.text}>Please log in to view your profile.</Text>
+        <Button title="Log In" onPress={() => navigation.navigate('LoginPage')} />
+        <Button title="Signup" onPress={() => navigation.navigate('SignupPage')} />
+      </View>
+    );
   }
+
+  const handleLogout = () => {
+    dispatch(logout());
+  };
 
   const { username, role } = userInfo || {};
     
@@ -25,6 +37,9 @@ export default function ProfilePage() {
 
   return (
     <View style={styles.container}>
+      <TouchableOpacity style={styles.button} onPress={handleLogout}>
+        <Text style={styles.buttonText}>Logout</Text>
+      </TouchableOpacity>
       {/*<Image source={{ uri: user.profilePicture }} style={styles.profilePicture} />*/}
       <Text style={styles.label}>Username:</Text>
       <Text style={styles.text}>{username}</Text>
