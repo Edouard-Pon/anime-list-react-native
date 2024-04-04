@@ -24,6 +24,11 @@ export const signup = createAsyncThunk('user/signup', async ({ username, passwor
   }
 });
 
+export const logout = createAsyncThunk('user/logout', async () => {
+  await AsyncStorage.clear();
+  return null;
+});
+
 const userSlice = createSlice({
   name: 'user',
   initialState: {
@@ -34,6 +39,9 @@ const userSlice = createSlice({
       state.userInfo = action.payload;
     });
     builder.addCase(signup.fulfilled, (state, action) => {
+      state.userInfo = action.payload;
+    });
+    builder.addCase(logout.fulfilled, (state, action) => {
       state.userInfo = action.payload;
     });
   },

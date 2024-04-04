@@ -28,6 +28,19 @@ export const addToFavorites = createAsyncThunk('animeList/addToFavorites', async
   return response.data.animeList;
 });
 
+export const deleteFromFavorites = createAsyncThunk('animeList/deleteFromFavorites', async (animeId) => {
+  const userId = await  AsyncStorage.getItem('userId');
+  const token = await AsyncStorage.getItem('token');
+
+  const response = await api.post(`/anime-list/${userId}/favorites`, { animeId }, {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
+  });
+
+  return response.data.animeList;
+});
+
 const animeListSlice = createSlice({
   name: 'animeList',
   initialState: {
