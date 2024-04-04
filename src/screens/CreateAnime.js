@@ -81,7 +81,7 @@ export default function CreateAnime() {
     const currentDate = selectedDate || new Date(releaseDate || Date.now());
     setReleaseDate(currentDate.toISOString());
     setShowDatePicker(false);
-  };  
+  };
 
   const handleImagePick = async () => {
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -127,7 +127,7 @@ export default function CreateAnime() {
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Create Anime</Text>
 
-      {cover ? (
+      {/* {cover ? (
         <>
           <Button title="Clear image" onPress={() => setCover(null)} />
           <Image
@@ -141,6 +141,25 @@ export default function CreateAnime() {
           <Button title="Upload cover image" onPress={handleImagePick} />
           <Text>No image selected</Text>
         </>
+      )} */}
+      {/* replace with TouchableOpacity */}
+
+      <TouchableOpacity style={styles.touch} onPress={handleImagePick}>
+        <Text>Upload cover image</Text>
+      </TouchableOpacity>
+      {cover ? (
+        <>
+          <TouchableOpacity style={styles.touch} onPress={() => setCover(null)}>
+            <Text>Clear image</Text>
+          </TouchableOpacity>
+          <Image
+            source={{ uri: cover.uri }}
+            style={styles.image}
+            onError={(error) => console.error('Image loading error:', error)}
+          />
+        </>
+      ) : (
+        <Text>No image selected</Text>
       )}
 
       <Autocomplete
@@ -213,7 +232,11 @@ export default function CreateAnime() {
         required
       />
 
-      <Button title="Pick Release Date" onPress={() => setShowDatePicker(true)} />
+      {/* {<Button style={styles.button} title="Pick Release Date" onPress={() => setShowDatePicker(true)} />} */}
+      <TouchableOpacity style={styles.touch} onPress={() => setShowDatePicker(true)}>
+        <Text >Pick Release Date</Text>
+      </TouchableOpacity>
+
       {showDatePicker && (
         <DateTimePicker
           value={releaseDate ? new Date(releaseDate) : new Date()}
@@ -284,6 +307,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderWidth: 1,
     borderRadius: 5,
+    backgroundColor: 'pink',
+  },
+  touch: {
+    backgroundColor: 'rgba(255, 155, 155, 0.7)',
+    borderRadius: 5,
+    padding: 10,
+    alignItems: 'center',
   },
   image: {
     width: 100,
