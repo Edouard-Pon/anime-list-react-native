@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, Button, TouchableOpacity, Image } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {logout} from "../store/user";
+import AnimeCard from '../components/AnimeCard';
 
 export default function ProfilePage({ navigation }) {
   const dispatch = useDispatch();
@@ -55,27 +56,11 @@ export default function ProfilePage({ navigation }) {
       {/*  <Text style={styles.buttonText}>Change Theme</Text>*/}
       {/*</TouchableOpacity>*/}
 
-      {/* three widgets aligned: to-watch, watch, abandoned */}
-      <View style={{ flexDirection: 'row' }}>
-        <View style={{ flex: 1, alignItems: 'center' }}>
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>To Watch</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={{ flex: 1, alignItems: 'center' }}>
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>Watched</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={{ flex: 1, alignItems: 'center' }}>
-          <TouchableOpacity style={[styles.button, styles.deleteButton]}>
-            <Text style={styles.buttonText}>Abandoned</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+      {/* Add a button to display favorite animeCards under profile */}
+      <TouchableOpacity style={styles.button}>
+        <Text style={styles.buttonText}>View Favorite Anime</Text>
+      </TouchableOpacity>
 
-      {/* TODO: When button is clicked, display the appropriate anime AnimeCards */}
-      
     </View>
   );
 }
