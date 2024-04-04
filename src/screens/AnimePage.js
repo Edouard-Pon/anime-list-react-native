@@ -42,11 +42,7 @@ function AnimePage({ route, navigation }) {
     navigation.navigate('MainPage');
   }
 
-  console.log(animeList.favorites)
-
   const isFavorite = animeList.favorites ? animeList.favorites.some(item => item.animeId === anime._id) : false;
-
-  console.log(isFavorite)
 
   const sections = [
     {

@@ -44,8 +44,6 @@ export const createAnime = createAsyncThunk('anime/createAnime', async (anime) =
       },
     });
 
-    console.log(response.data.anime)
-
     return response.data.anime;
   } catch (e) {
     return e.response.status === 403 ? e.response.data.message : '403 Forbidden';
