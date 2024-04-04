@@ -86,7 +86,6 @@ const styles = StyleSheet.create({
     justifyContent: 'top',
     alignItems: 'center',
     backgroundColor: 'white',
-    height: Dimensions.get('window').height,
   },
   searchbar: {
     width: Dimensions.get('window').width - 64,
