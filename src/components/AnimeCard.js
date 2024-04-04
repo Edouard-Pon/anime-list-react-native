@@ -6,7 +6,7 @@ function AnimeCard({ anime, navigation }) {
     <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('AnimePage', { anime })}>
       <Image style={styles.image} source={{uri: anime.coverImagePath}} />
       <Text style={styles.title}>
-        {anime.title.length > 18 ? `${anime.title.slice(0, 15)}...` : anime.title}
+        {anime && anime.title.length > 18 ? `${anime.title.slice(0, 15)}...` : anime.title}
       </Text>
     </TouchableOpacity>
   );
@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
   card: {
     margin: 10,
     padding: 10,
-    backgroundColor: 'white',
+    backgroundColor: 'transparent',
     borderRadius: 10,
     border: 0,
     outline: 'none',
@@ -27,7 +27,8 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginTop: 5,
     fontWeight: 'bold',
-    color: 'black'
+    color: 'black',
+    fontFamily: 'Pacifico',
   },
   image: {
     width: 160,

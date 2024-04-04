@@ -1,23 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, FlatList, SectionList, ScrollView } from 'react-native';
+import React, { useEffect } from 'react';
+import {View, Text, StyleSheet, Image, FlatList, SectionList, ScrollView, Dimensions} from 'react-native';
 import AnimeCard from '../components/AnimeCard';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchAnime } from '../store/anime';
-
-import { AppLoading } from 'expo';
-import { useFonts } from 'expo-font';
 
 function CharacterPage({ route, navigation }) {
   const { character } = route.params;
   const animeList = useSelector((state) => state.anime.animeList);
   const dispatch = useDispatch();
-
-  const [fontsLoaded] = useFonts({
-    Pacifico: require('../../assets/fonts/Pacifico-Regular.ttf')
-  });
-  if (!fontsLoaded) {
-    return <AppLoading />;
-  }
 
   useEffect(() => {
     if (animeList.length === 0 && character.anime.length > 0) {
@@ -30,28 +20,28 @@ function CharacterPage({ route, navigation }) {
       title: 'Anime',
       data: [animeList.filter((anime) => character.anime.includes(anime._id))],
       renderItem: ({ item }) => (
-        <>
-        <Text style={styles.relatedAnimes}>Appears in: </Text>
         <FlatList
           data={item}
           numColumns={2}
           keyExtractor={(item) => item._id}
           renderItem={({ item }) => <AnimeCard anime={item} navigation={navigation} />}
+          ListHeaderComponent={() => (
+            <Text style={styles.relatedAnimes}>Appears in: </Text>
+          )}
         />
-        </>
       ),
     },
   ];
 
   return (
     <SectionList
-      style={styles.container}
+      contentContainerStyle={styles.container}
       sections={sections}
       keyExtractor={(item) => item._id}
       ListHeaderComponent={() => (
         <View style={styles.container}>
           <View style={styles.titleContainer}>
-            <Text style={styles.title}>Name: {character.name}</Text>
+            <Text style={styles.title}>{character.name}</Text>
           </View>
           <View style={styles.imageAndTextContainer}>
             <Image style={styles.image} source={{ uri: character.imagePath }} />
@@ -69,11 +59,12 @@ function CharacterPage({ route, navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    padding: 16,
-    backgroundColor: '#FFC0CB', // Pink background color
+    backgroundColor: '#FFC0CB',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   titleContainer: {
+    marginTop: 16,
     marginBottom: 16,
   },
   imageAndTextContainer: {
@@ -89,24 +80,24 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     marginLeft: 16,
-    flex: 1,
   },
   text: {
     fontSize: 18,
-    fontFamily: 'Pacifico', // Apply Pacifico font
-    color: '#333', // Text color (you can change this as needed)
-    marginBottom: 10, // Adjust the bottom margin as needed
+    fontFamily: 'Pacifico',
+    color: '#333',
+    marginBottom: 10,
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    fontFamily: 'Pacifico', // Apply Pacifico font
-    marginBottom: 10, // Adjust the bottom margin as needed
+    fontFamily: 'Pacifico',
+    marginBottom: 10,
   },
   relatedAnimes: {
+    marginTop: 16,
     fontSize: 24,
-    fontFamily: 'Pacifico', // Apply Pacifico font
-    marginBottom: 10, // Adjust the bottom margin as needed
+    fontFamily: 'Pacifico',
+    marginBottom: 10,
   },
 });
 

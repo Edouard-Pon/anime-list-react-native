@@ -14,18 +14,18 @@ const styles = StyleSheet.create({
   card: {
     margin: 10,
     padding: 10,
-    backgroundColor: 'white',
+    backgroundColor: 'transparent',
     borderRadius: 10,
     border: 0,
     outline: 'none',
     maxWidth: 180,
-
   },
   title: {
     fontSize: 18,
     marginTop: 5,
     fontWeight: 'bold',
-    color: 'black'
+    color: 'black',
+    fontFamily: 'Pacifico',
   },
   image: {
     width: 160,
