@@ -1,5 +1,7 @@
 # Anime List React Native App
 
+## WIP Migration to TypeScript
+
 ## Introduction
 
 This is a University project created for educational purposes. The goal of this project is to create a mobile application.  
@@ -22,7 +24,6 @@ This app requires a backend server to work properly. The backend source code can
 - Expo
 - Redux
 - Axios
-- React Navigation
 
 ## Features
 
