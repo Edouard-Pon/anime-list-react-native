@@ -15,9 +15,9 @@ export default function TabLayout() {
         headerShown: false,
       }}>
       <Tabs.Screen
-        name="index"
+        name="(anime)"
         options={{
-          title: 'Home',
+          title: 'Anime',
           tabBarIcon: ({ color, focused }) => (
             <TabBarIconIonicons name={focused ? 'home' : 'home-outline'} color={color} />
           ),
