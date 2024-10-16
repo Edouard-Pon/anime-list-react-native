@@ -1,6 +1,6 @@
 import { Stack } from 'expo-router';
 
-export default function AnimeLayout() {
+export default function CharacterLayout() {
   return (
     <Stack>
       <Stack.Screen name="index" />

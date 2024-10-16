@@ -12,7 +12,7 @@ type AnimeCardProps = {
 const AnimeCard = (props: AnimeCardProps) => {
   return (
     <Link href={{
-      pathname: '/[id]/details',
+      pathname: '/(anime)/details/[id]',
       params: { id: props.id }
     }}>
       <Image source={{ uri: props.cover_image }} style={{ width: 100, height: 150 }} />
