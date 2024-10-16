@@ -24,7 +24,7 @@ export default function LoginScreen() {
 
   useEffect(() => {
     if (status === 'succeeded') {
-      router.navigate('/(profile)');
+      router.replace('/(profile)');
     }
   }, [status]);
 

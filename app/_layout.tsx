@@ -2,7 +2,7 @@ import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native
 import { useFonts } from 'expo-font';
 import {Stack, useRouter} from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import 'react-native-reanimated';
 import { Provider } from "react-redux";
 import { store } from "@/store/store";
@@ -20,6 +20,7 @@ export default function RootLayout() {
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
+  const [isLogged, setIsLogged] = useState(false);
 
   useEffect(() => {
     const loadToken = async () => {
@@ -28,7 +29,7 @@ export default function RootLayout() {
         setToken(token);
         store.dispatch(setTokenStore(token));
       } else {
-        router.navigate('/login'); // TODO - fix this
+        setIsLogged(false);
       }
     };
 
@@ -36,6 +37,10 @@ export default function RootLayout() {
 
     if (loaded) {
       SplashScreen.hideAsync();
+    }
+
+    if (loaded && !isLogged) {
+      router.replace('/login');
     }
   }, [loaded]);
 
